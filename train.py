@@ -61,7 +61,8 @@ def train(base_loader,model, optimization, start_epoch, stop_epoch, params):
 if __name__=='__main__':
     np.random.seed(10)
     params = parse_args('train')
-
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
     if params.dataset == 'cross':
         base_file = configs.data_dir['miniImagenet'] + 'all.json' 
@@ -119,7 +120,7 @@ if __name__=='__main__':
             model           = BaselineTrain( model_dict[params.model], params.num_classes, loss_type = 'dist')
 
     elif params.method in ['protonet','matchingnet','relationnet', 'relationnet_softmax', 'maml', 'maml_approx']:
-        base_datamgr            = SetDataManager(image_size, sparams.batchsize)
+        base_datamgr            = SetDataManager(image_size, params.batchsize)
         base_loader             = base_datamgr.get_data_loader( base_file , aug = params.train_aug ,ifshuffle = True )
          
         #val_datamgr             = SetDataManager(image_size, params.batchsize)
